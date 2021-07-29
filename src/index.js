@@ -1,36 +1,26 @@
 const Koa = require('koa');
+const Router = require('koa-router');
+
 const app = new Koa();
+const router = new Router();
 
-app.use(async (ctx, next) => { // app.use에서 use라는 함수는 인자로 받은 함수를 app의 middleware 배열에 등록을 해준다.
-    console.log('아무튼 숫자세기 입니다.');
-    ctx.set("number_count", 'one'); // Header, ID
-    await next(); // ctx.body = "숫자세기"; 이후 ctx를 타고 올라오면 이부분까지 실행이 된 상태.
-    console.log('숫자 세기 끝');
+router.get('/', ctx => { // 메인페이지 접속 경로
+    ctx.body = '메인 페이지 입니다.';
 });
 
-app.use(async (ctx, next) => {
-    console.log('1. one');
-    await next(); // 2. two 출력 함수 호출
+router.get('/other/:group', ctx => { // /other/XXX 접속시 XXX 문구가 그대로 페이지에 출력됨을 볼수 있다.
+    const { group } = ctx.params; // group 값을 url과 page 모두에서 공유함을 알 수 있다.
+    ctx.body = `${group}의 페이지 입니다.`;
 });
 
-app.use(async (ctx, next) => {
-    console.log('2. two');
-    await next(); // 3. three 출력 함수 호출
+router.get('/number', ctx => {
+    const { number_alphabet } = ctx.query; // ? 뒤의 query 값.
+    console.log(ctx.query);
+    ctx.body = `이 페이지는 ${number_alphabet}번째 페이지 입니다.`; // ES6 명세에서 추가된 자바스크립트 문법인 백틱(`)을 활용. 여러개의 ${~} 사용가능.
 });
 
-app.use(async (ctx, next) => {
-    console.log('3. three');
-    await next(); // 4. four 출력 함수 호출
-});
-
-app.use(async (ctx, next) => {
-    console.log('4. four');
-    await next(); // 5. five 출력 함수 호출
-});
-
-app.use(async (ctx, next) => {
-    console.log('5. five');
-    ctx.body = "숫자세기"; // 순차 실행이 완료되면 호출되어 왔던 순서대로 ctx를 따라 올라가며 실행되지 않은 구문들은 실행하며 올라감.
-});
-
+app.use(router.routes());
+app.use(router.allowedMethods());
 app.listen(3000);
+
+// http://localhost:3000/number?number_alphabet=one&id=3 형태로 접속

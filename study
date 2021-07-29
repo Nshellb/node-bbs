@@ -64,6 +64,18 @@ Promise를 return한다.
 
 
 
+3. koa-router 사용하기
+koa-router 설치 -> npm install --save koa-router
+
+router.get(~) 을 통해서 접속 경로마다의 요청 페이지를 다르게 설정 할 수 있다.
+
+
+
+
+
+
+
+
 
 
 
