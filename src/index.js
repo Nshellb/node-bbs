@@ -1,11 +1,13 @@
 const Koa = require('koa');
 const Router = require('koa-router');
+const db = require('./model');
 
 const app = new Koa();
 const router = new Router();
 
-router.get('/', ctx => { // 메인페이지 접속 경로
-    ctx.body = '메인 페이지 입니다.';
+router.get('/', async ctx => { // 메인페이지 접속 경로
+    const ret = await db.findUser();
+    ctx.body = ret;
 });
 
 router.get('/other/:group', ctx => { // /other/XXX 접속시 XXX 문구가 그대로 페이지에 출력됨을 볼수 있다.

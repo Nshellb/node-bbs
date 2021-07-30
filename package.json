@@ -4,10 +4,18 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@koa/cors": "^3.1.0",
+    "dotenv": "^10.0.0",
+    "knex": "^0.95.8",
     "koa": "^2.13.1",
-    "koa-router": "^10.0.0"
+    "koa-body": "^4.2.0",
+    "koa-router": "^10.0.0",
+    "mariadb": "^2.5.4",
+    "mysql": "^2.18.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "knex-mariadb": "^2.0.0"
+  },
   "scripts": {
     "start": "nodemon --watch src/ src",
     "test": "echo \"Error: no test specified\" && exit 1"

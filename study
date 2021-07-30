@@ -74,6 +74,122 @@ router.get(~) 을 통해서 접속 경로마다의 요청 페이지를 다르게
 
 
 
+4.knext.js로 mysql과 연결하기
+mysql 설치. https://opentutorials.org/course/3161/19532
+
+https://bitnami.com/stack/wamp -> Download install 진행(비로그인)
+
+mariaDB 대신 mySQL이 포함된 버전.
+https://downloads.bitnami.com/files/stacks/wampstack/7.1.31-0/bitnami-wampstack-7.1.31-0-windows-x64-installer.exe
+
+
+설치된 파일 실행후 설치 위치 확인.
+
+MySQL은 다중 사용자 프로그램이기 때문에 root 계정 설정이 필요하다. 비밀번호 설정후 진행. cloud 서비스는 해제.
+
+설치 이후 Manage Servers 에서 MySQL 확인 가능. Start/Stop으로 서비스 제어가능.
+
+cmd로 db 실행파일이 있는 위치까지 이동후 [mysql -uroot -p] 입력하고 비밀번호를 입력하여 실행 가능.
+
+cmd로 접속후 db 생성 (https://futurists.tistory.com/11)
+
+CREATE DATABASE study_db default CHARACTER SET UTF8; study_db 라는 데이터 베이스를 생성하고 한글을 사용할 수 있는 UTF8로 문자열을 저장
+SHOW databases; // DB 목록 보기
+
+
+knex 설치 후 DB 연결. ( https://knexjs.org/ DB 생성.)
+knex는 DB software를 위한 query builder 이다.
+
+npm install knex --save // knex npm 모듈.
+npm install mysql --save // mysql을 사용하기 위한 npm 모듈.
+//npm install mariadb // mariadb npm 모듈.
+//npm i --save-dev knex-mariadb // knex-mariadb npm 모듈.
+
+npm install --save dotenv // .env -> (https://hudi.kr/node-js-dotenv-%ED%99%98%EA%B2%BD-%EB%B3%80%EC%88%98-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0/)
+
+프로젝트 root 경로에 .env 파일을 생성하고 작성.
+
+
+database 디렉토리 생성 후 index.js 작성.
+
+DB 작성
+
+use study_db;
+
+CREATE TABLE `USER` (
+    user_id INT(11) auto_increment NOT NULL,
+    user_name VARCHAR(32) NOT NULL,
+    created_at datetime NOT NULL,
+    update_At datetime default NULL,
+    PRIMARY KEY (user_id)
+);
+
+CREATE TABLE CONTENT (
+    content_id INT(11) auto_increment NOT NULL,
+    title VARCHAR(32) NOT NULL,
+    context text NOT NULL,
+    created_at datetime NOT NULL,
+    update_At datetime default NULL,
+    PRIMARY KEY (content_id)
+);
+
+CREATE TABLE COMMENT (
+    comment_id INT(11) auto_increment NOT NULL,
+    user_id INT(11) NOT NULL,
+    content_id INT(11) NOT NULL,
+    context VARCHAR(32) NOT NULL,
+    created_at datetime NOT NULL,
+    update_At datetime default NULL,
+    PRIMARY KEY (comment_id)
+);
+
+CREATE TABLE SUB_COMMENT (
+    sub_comment_id INT(11) auto_increment NOT NULL,
+    user_id INT(11) NOT NULL,
+    comment_id INT(11) NOT NULL,
+    context VARCHAR(32) NOT NULL,
+    created_at datetime NOT NULL,
+    update_At datetime default NULL,
+    PRIMARY KEY (sub_comment_id)
+);
+
+
+데이터 입력
+
+INSERT INTO `USER`
+values (null, 'lelana', now(), null);
+
+
+model > index.js 생성후 기존의 db import 및 async 사용 함수 작성
+
+main index.js에 model > index.js import 후 await 사용 호출.
+
+브라우저 접속시 data를 받아옴을 확인할 수 있음.
+
+
+
+
+
+
+
+5. Vue 프로젝트와 node.js 서버 연결하기
+[기존 작업 과정]
+1) koa 설치. -> npm install koa
+2) nodemon ( npm install -g nodemon )
+3) node를 start시 nodemon 사용을 위해 [npm init] 명령으로 package.json 생성 (모두 enter)
+package.json의 script 부분에 start 구문 작성.
+앞으로는 npm start로 node runtime을 구동 할 수 있다.
+4) npm install --save koa-router
+5) npm install knex --save // knex npm 모듈.
+6) npm install mysql --save // mysql을 사용하기 위한 npm 모듈.
+
+[강의]
+cors 설치 npm install @koa/cors --save
+Cross Origin Resource Sharing 의 약자로 서로 다른 도메인에서 리소스를 요청하게 되면 보안상의 이유로 교차 출저 HTTP 요청을 제한하는것이다.
+
+koabody ( npm install koa-body )
+글을 요청 및 수정시 POST 요청을 사용.
+client에서 보낸 데이터를 쉽게 parsing 해서 가져올수 있게 함.
 
 
 
@@ -83,11 +199,10 @@ router.get(~) 을 통해서 접속 경로마다의 요청 페이지를 다르게
 
 
 
-koa ( npm install koa )
-koa-router ( npm install --save koa-router )
+
+
+
 dotenv ( npm install dotenv )
-knex ( npm install knex --save )
-mysql ( npm install mysql )
 
 
 cors ( npm install @koa/cors --save )
@@ -95,9 +210,7 @@ Cross Origin Resource Sharing 의 약자로 서로 다른 도메인에서 리소
 
 
 
-koabody ( npm install koa-body )
-글을 요청 및 수정시 POST 요청을 사용.
-client에서 보낸 데이터를 쉽게 parsing 해서 가져올수 있게 함.
+
 
 
 
