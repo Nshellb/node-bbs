@@ -1,7 +1,7 @@
 유튜브의 node.js 강의 개발이다.
 (https://www.youtube.com/channel/UC5ChZXCogqV99ju-M0TNNfw)
 
-아래는 
+아래는 개발노트
 
 1. node.js 설치와 간단한 사용법
 node.js : javascript runtime 
